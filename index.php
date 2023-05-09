@@ -320,7 +320,7 @@ else {
         setcookie('pass', $password);
 
         try {
-            $stmt = $db->prepare("INSERT INTO application SET name = ?,email = ?,year = ?,pol = ?,kol_kon = ?,biography = ?,ccheck = ?");
+            $stmt = $db->prepare("REPLACE INTO application SET name = ?,email = ?,year = ?,pol = ?,kol_kon = ?,biography = ?,ccheck = ?");
             $stmt->execute([$_POST['fio'], $_POST['email'], (int)$_POST['year'], $_POST['pol'], (int)$_POST['limbs'], $_POST['biography'], 1]);
         } catch (PDOException $e) {
             print('Error : ' . $e->getMessage());
@@ -354,7 +354,7 @@ else {
         // Сохраняем куку с признаком успешного сохранения.
         setcookie('save', '1');
 
-//        // Делаем перенаправление.
-//        header('Location: ./');
+       // Делаем перенаправление.
+       header('Location: ./');
     }
 }
