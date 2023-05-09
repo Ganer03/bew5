@@ -309,6 +309,7 @@ else {
             exit();
         }
     } else {
+        echo 'gr';
         // Генерируем уникальный логин и пароль.
         // TODO: сделать механизм генерации, например функциями rand(), uniquid(), md5(), substr().
         $login = uniqid();
@@ -339,6 +340,7 @@ else {
             try {
                 $stmt = $db->prepare("INSERT INTO user SET app_id = ?, login = ?, password = ?");
                 $stmt->execute([$app_id, $login, md5($password)]);
+                echo 'nice';
             } catch (PDOException $e) {
                 print('Error : ' . $e->getMessage());
                 exit();
@@ -348,9 +350,5 @@ else {
         }
 
         // Сохраняем куку с признаком успешного сохранения.
-        setcookie('save', '1');
-
-        // Делаем перенаправление.
-        header('Location: ./');
     }
 }
