@@ -339,7 +339,7 @@ else {
 
             try {
                 $stmt = $db->prepare("REPLACE INTO user SET app_id = ?, login = ?, password = ?");
-                $stmt->execute([int($app_id), $login, md5($password)]);
+                $stmt->execute([(int)$app_id, $login, md5($password)]);
                 var_dump(md5($password));
                 var_dump($login);
                 var_dump($app_id);
