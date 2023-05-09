@@ -97,11 +97,13 @@ else {
         $stmt->execute([$login]);
         var_dump($stmt->fetchColumn());
         $_SESSION['uid'] = $stmt->fetchColumn();
+        var_dump($_SESSION['uid']);
+        var_dump($stmt->fetchColumn());
     }
     else{
         setcookie('login_error', '1', time() + 24 * 60 * 60);
         header('Location: login.php');
         exit();
     }
-    header('Location: ./');
+//     header('Location: ./');
 }
