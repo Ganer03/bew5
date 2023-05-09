@@ -342,7 +342,7 @@ else {
                 $stmt->execute([$app_id, $login, md5($password)]);
                 echo md5($password);
                 echo str($login);
-                echo str($app_id)
+                echo str($app_id);
             } catch (PDOException $e) {
                 print('Error : ' . $e->getMessage());
                 exit();
