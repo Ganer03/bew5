@@ -89,6 +89,7 @@ else {
     $stmt->execute([$login, md5($password)]);
     var_dump($_POST['login']);
     var_dump($_POST['pass']);
+    var_dump($stmt->rowCount());
     if ($stmt->rowCount() > 0) {
         $_SESSION['login'] = $_POST['login'];
         $stmt = $db->prepare("SELECT app_id FROM user WHERE login = ?");
