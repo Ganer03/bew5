@@ -281,13 +281,11 @@ else {
     if (!empty($_COOKIE[session_name()]) &&
         session_start() && !empty($_SESSION['login'])) {
         echo 'good';
-        var_dump($_SESSION['login']);
         // TODO: перезаписать данные в БД новыми данными,
         // кроме логина и пароля.
         try {
             $stmt = $db->prepare("SELECT app_id FROM user WHERE login = ?");
-            var_dump($_SESSION['login']);
-            $stmt->execute($_SESSION['login']);
+            $stmt->execute([$_SESSION['login']]);
             $app_id = $stmt->fetchColumn();
 
             $stmt = $db->prepare("UPDATE application SET name = ?, email = ?, year = ?, pol = ?, kol_kon = ?, biography = ? WHERE app_id = ?");
