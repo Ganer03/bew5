@@ -1,30 +1,28 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Задание 4</title>
-    <link rel="stylesheet" href="style.css">
+<html>
+  <head>
     <style>
-        /* Сообщения об ошибках и поля с ошибками выводим с красным бордюром. */
-        .error {
-            border: 2px solid red;
-        }
+/* Сообщения об ошибках и поля с ошибками выводим с красным бордюром. */
+.error {
+  border: 2px solid red;
+}
     </style>
-</head>
-<body>
+  </head>
+  <body>
+
 <?php
 if (!empty($messages)) {
-    print('<div id="messages">');
-    // Выводим все сообщения.
-    foreach ($messages as $message) {
-        print($message);
-    }
-    print('</div>');
+  print('<div id="messages">');
+  // Выводим все сообщения.
+  foreach ($messages as $message) {
+    print($message);
+  }
+  print('</div>');
 }
 
 // Далее выводим форму отмечая элементы с ошибками классом error
 // и задавая начальные значения элементов ранее сохраненными.
 ?>
+
 <div class="formss">
     <form action="index.php" method="POST">
         <label>ФИО:<br/><input name="fio" <?php if ($errors['fio']) {print 'class="error"';} ?> value="<?php print $values['fio']; ?>"/></label>
@@ -63,22 +61,22 @@ if (!empty($messages)) {
         if($values['pol'] == 'W'){
             printf('<label class="pot"><input type="radio" name="pol" value="M">M</label>');
             printf('<label class="pot"><input type="radio" name="pol" value="W" checked="checked">W</label>');
-          }
-          else
-              if($values['pol'] == 'M'){
-            printf('<label class="pot"><input type="radio" name="pol" value="M" checked="checked">M</label>');
-            printf('<label class="pot"><input type="radio" name="pol" value="W">W</label>');
         }
-        else{
-            if($errors['pol']){
-                printf('<label class="pot error" ><input type="radio" name="pol" value="M">M</label>');
-                printf('<label class="pot error" ><input type="radio" name="pol" value="W">W</label>');
-            }
-            else{
-                printf('<label class="pot"><input type="radio" name="pol" value="M">M</label>');
+        else
+            if($values['pol'] == 'M'){
+                printf('<label class="pot"><input type="radio" name="pol" value="M" checked="checked">M</label>');
                 printf('<label class="pot"><input type="radio" name="pol" value="W">W</label>');
             }
-        }
+            else{
+                if($errors['pol']){
+                    printf('<label class="pot error" ><input type="radio" name="pol" value="M">M</label>');
+                    printf('<label class="pot error" ><input type="radio" name="pol" value="W">W</label>');
+                }
+                else{
+                    printf('<label class="pot"><input type="radio" name="pol" value="M">M</label>');
+                    printf('<label class="pot"><input type="radio" name="pol" value="W">W</label>');
+                }
+            }
         ?>
         Кол-во конечностей:<br/>
         <?php
@@ -130,7 +128,7 @@ if (!empty($messages)) {
                             printf('<option value="%d" >%s</option>',$i+1, $mas[$i]);
                         }
                     }
-            }
+                }
             printf('</select>');
             ?>
         </label><br/>
@@ -145,5 +143,5 @@ if (!empty($messages)) {
         <input type="submit" value="Отправить"/>
     </form>
 </div>
-</body>
+  </body>
 </html>
