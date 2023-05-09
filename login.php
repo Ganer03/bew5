@@ -87,10 +87,14 @@ else {
     $db = new PDO('mysql:host=localhost;dbname=u52802', $user, $pass, [PDO::ATTR_PERSISTENT => true]);
     $stmt = $db->prepare('SELECT id FROM user WHERE (login = ?) AND (password = ?) ');
     $stmt->execute([$login, md5($password)]);
+    var_dump($stmt->rowCount());
+    var_dump($login);
+    var_dump($password));
     if ($stmt->rowCount() > 0) {
         $_SESSION['login'] = $_POST['login'];
         $stmt = $db->prepare("SELECT app_id FROM user WHERE login = ?");
         $stmt->execute([$login]);
+        var_dump($stmt->fetchColumn());
         $_SESSION['uid'] = $stmt->fetchColumn();
     }
     else{
