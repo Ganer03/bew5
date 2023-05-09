@@ -163,7 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 $values['biography'] = $app[0]['biography'];
             }
             if (!empty($abilities)) {
-                $values['super'] =  serialize($abilities);
+                $values['super'] =  $abilities;
             }
             $values['check-1'] = 1;
         } catch (PDOException $e) {
