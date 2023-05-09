@@ -331,7 +331,7 @@ else {
         foreach ($_POST['super'] as $super) {
             try {
                 $stmt = $db->prepare("REPLACE INTO userconnection SET idap = ?, idsuper = ?");
-                $stmt->execute([$us_last, $super]);
+                $stmt->execute([$app_id, $super]);
             } catch (PDOException $e) {
                 print('Error : ' . $e->getMessage());
                 exit();
