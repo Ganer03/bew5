@@ -287,7 +287,7 @@ else {
         try {
             $stmt = $db->prepare("SELECT app_id FROM user WHERE login = ?");
             var_dump($_SESSION['login']);
-            $stmt->execute((str)$_SESSION['login']);
+            $stmt->execute($_SESSION['login']);
             $app_id = $stmt->fetchColumn();
 
             $stmt = $db->prepare("UPDATE application SET name = ?, email = ?, year = ?, pol = ?, kol_kon = ?, biography = ? WHERE app_id = ?");
