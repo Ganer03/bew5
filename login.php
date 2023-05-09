@@ -88,23 +88,16 @@ else {
     $db = new PDO('mysql:host=localhost;dbname=u52802', $user, $pass, [PDO::ATTR_PERSISTENT => true]);
     $stmt = $db->prepare('SELECT id FROM user WHERE (login = ?) AND (password = ?) ');
     $stmt->execute([$login, md5($password)]);
-    var_dump($stmt->rowCount());
-    var_dump($login);
-    var_dump($_POST['pass']);
     if ($stmt->rowCount() > 0) {
         $_SESSION['login'] = $_POST['login'];
         $stmt = $db->prepare("SELECT app_id FROM user WHERE login = ?");
         $stmt->execute([$login]);
-        var_dump($stmt->fetchColumn());
-        var_dump($stmt->fetchColumn());
         $_SESSION['uid'] = $stmt->fetchColumn();
-        var_dump($_SESSION['uid']);
-        var_dump($stmt->fetchColumn());
     }
     else{
         setcookie('login_error', '1', time() + 24 * 60 * 60);
         header('Location: login.php');
         exit();
     }
-//     header('Location: ./');
+    header('Location: ./');
 }
