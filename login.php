@@ -54,11 +54,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
 ?>
 
-<form action="" method="post">
-  <input <?php  $errors['login'] print 'class="error"'?> name="login" />
-  <input <?php  $errors['pass'] print 'class="error"'?> name="pass" />
-  <input type="submit" value="Войти" />
-</form>
+    <form action="" method="post">
+        <input <?php  if (empty($errors['login'])) print 'class="error"'?> name="login" />
+        <input <?php  if (empty($errors['pass'])) print 'class="error"'?> name="pass" />
+        <input type="submit" value="Войти" />
+    </form>
 
 <?php
 }
