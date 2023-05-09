@@ -66,6 +66,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 else {
     $login = $_POST['login'];
     $password = $_POST['pass'];
+    if (empty($login)) {
+        setcookie('login_error', '1', time() + 24 * 60 * 60);
+        $errors = TRUE;
+    }
+    if (empty($password)) {
+        setcookie('password_error', '1', time() + 24 * 60 * 60);
+        $errors = TRUE;
+    }
+
+    if ($errors) {
+        header('Location: login.php');
+        exit();
+    }
     // TODO: Проверть есть ли такой логин и пароль в базе данных.
     // Выдать сообщение об ошибках.
     $user = 'u52802';
@@ -77,6 +90,12 @@ else {
         $_SESSION['login'] = $_POST['login'];
         $stmt = $db->prepare("SELECT app_id FROM user WHERE login = ?");
         $stmt->execute([$login]);
+        $_SESSION['uid'] = $stmt->fetchColumn();
+    }
+    else{
+        setcookie('login_error', '1', time() + 24 * 60 * 60);
+        header('Location: login.php');
+        exit();
     }
     header('Location: ./');
 }
