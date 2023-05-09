@@ -79,6 +79,5 @@ else {
         $stmt->execute([$login]);
         echo 'good';
     }
-    echo 'g';
-    // Делаем перенаправление.
+    header('Location: ./');
 }
