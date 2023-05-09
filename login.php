@@ -94,8 +94,8 @@ else {
     }
     else{
         setcookie('login_error', '1', time() + 24 * 60 * 60);
-        header('Location: login.php');
-        exit();
+//         header('Location: login.php');
+//         exit();
     }
     header('Location: ./');
 }
