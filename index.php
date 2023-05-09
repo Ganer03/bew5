@@ -287,10 +287,10 @@ else {
             $stmt = $db->prepare("SELECT app_id FROM user WHERE login = ?");
             $stmt->execute([$_SESSION['login']]);
             $app_id = $stmt->fetchColumn();
-
+            log_to_console($app_id);
             $stmt = $db->prepare("UPDATE application SET name = ?, email = ?, year = ?, pol = ?, kol_kon = ?, biography = ? WHERE app_id = ?");
             $stmt->execute([$_POST['fio'], $_POST['email'], (int)$_POST['year'], $_POST['pol'], (int)$_POST['limbs'], $_POST['biography'], $app_id]);
-
+            log_to_console($_SESSION['login']);
             $stmt = $db->prepare("SELECT idsuper FROM userconnection WHERE idap = ?");
             $stmt->execute([$app_id]);
             $abil = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
