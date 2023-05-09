@@ -67,6 +67,7 @@ else {
     $errors = FALSE;
     $login = $_POST['login'];
     $password = $_POST['pass'];
+    var_dump($password);
     if (empty($login)) {
         setcookie('login_error', '1', time() + 24 * 60 * 60);
         $errors = TRUE;
@@ -89,7 +90,7 @@ else {
     $stmt->execute([$login, md5($password)]);
     var_dump($stmt->rowCount());
     var_dump($login);
-    var_dump($password));
+    var_dump($_POST['pass']);
     if ($stmt->rowCount() > 0) {
         $_SESSION['login'] = $_POST['login'];
         $stmt = $db->prepare("SELECT app_id FROM user WHERE login = ?");
