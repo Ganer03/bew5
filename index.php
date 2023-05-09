@@ -140,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $stmt->execute([$app_id]);
             $app = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            $stmt = $db->prepare("SELECT idsuper FROM userconnection WHERE idsuper = ?");
+            $stmt = $db->prepare("SELECT idsuper FROM userconnection WHERE idap = ?");
             $stmt->execute([$app_id]);
             $abilities = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
@@ -159,13 +159,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             if (!empty($app[0]['pol'])) {
                 $values['pol'] = $app[0]['pol'];
             }
-            if (!empty($dates[0]['biography'])) {
-                $values['biography'] = $dates[0]['biography'];
+            if (!empty($app[0]['biography'])) {
+                $values['biography'] = $app[0]['biography'];
             }
             if (!empty($abilities)) {
                 $values['super'] =  serialize($abilities);
             }
-
+            $values['check-1'] = 1;
         } catch (PDOException $e) {
             print('Error : ' . $e->getMessage());
             exit();
