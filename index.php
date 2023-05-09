@@ -338,7 +338,7 @@ else {
             }
 
             try {
-                $stmt = $db->prepare("INSERT INTO user SET app_id = ?, login = ?, password = ?");
+                $stmt = $db->prepare("INSERT INTO user app_id = ?, login = ?, password = ?");
                 $stmt->execute([$app_id, $login, md5($password)]);
                 echo 'nice';
             } catch (PDOException $e) {
