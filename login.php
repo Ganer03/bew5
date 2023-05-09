@@ -77,8 +77,8 @@ else {
         $_SESSION['login'] = $_POST['login'];
         $stmt = $db->prepare("SELECT app_id FROM user WHERE login = ?");
         $stmt->execute([$login]);
-        $_SESSION['uid'] = $stmt->fetchColumn();
+        echo 'good';
     }
+    echo 'g';
     // Делаем перенаправление.
-    header('Location: ./');
 }
