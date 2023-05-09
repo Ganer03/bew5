@@ -285,17 +285,17 @@ else {
         // кроме логина и пароля.
         try {
             $stmt = $db->prepare("SELECT app_id FROM user WHERE login = ?");
-            $stmt->execute($_SESSION[$login]);
+            $stmt->execute($_SESSION['login']);
             $app_id = $stmt->fetchColumn();
 
             $stmt = $db->prepare("UPDATE application SET name = ?, email = ?, year = ?, pol = ?, kol_kon = ?, biography = ? WHERE app_id = ?");
-            $stmt->execute([$fio, $email, $year, $pol, $limbs, $biography, $app_id]);
+            $stmt->execute([$_POST['fio'], $_POST['email'], (int)$_POST['year'], $_POST['pol'], (int)$_POST['limbs'], $_POST['biography'], $app_id]);
 
             $stmt = $db->prepare("SELECT idsuper FROM userconnection WHERE idap = ?");
             $stmt->execute([$app_id]);
             $abil = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
-            if (array_diff($abil, $abilities)) {
+            if (array_diff($abil, $_POST['super'])) {
                 $stmt = $db->prepare("DELETE FROM userconnection WHERE idap = ?");
                 $stmt->execute([$app_id]);
 
