@@ -288,7 +288,7 @@ else {
             $stmt->execute([$_SESSION['login']]);
             $app_id = $stmt->fetchColumn();
             var_dump($app_id);
-            $stmt = $db->prepare("UPDATE application SET name = ?, email = ?, year = ?, pol = ?, kol_kon = ?, biography = ? WHERE app_id = ?");
+            $stmt = $db->prepare("UPDATE application SET name = ?, email = ?, year = ?, pol = ?, kol_kon = ?, biography = ? WHERE id = ?");
             $stmt->execute([$_POST['fio'], $_POST['email'], (int)$_POST['year'], $_POST['pol'], (int)$_POST['limbs'], $_POST['biography'], $app_id]);
             var_dump($_SESSION['login']);
             $stmt = $db->prepare("SELECT idsuper FROM userconnection WHERE idap = ?");
@@ -299,8 +299,8 @@ else {
                 $stmt = $db->prepare("DELETE FROM userconnection WHERE idap = ?");
                 $stmt->execute([$app_id]);
 
-                $stmt = $db->prepare("INSERT INTO userconnection SET idap = ?, idsuper = ?");
                 foreach ($_POST['super'] as $super_id) {
+                    $stmt = $db->prepare("INSERT INTO userconnection SET idap = ?, idsuper = ?");
                     $stmt->execute([$app_id, $super_id]);
                 }
             }
