@@ -340,9 +340,6 @@ else {
         try {
             $stmt = $db->prepare("REPLACE INTO user SET app_id = ?, login = ?, password = ?");
             $stmt->execute([(int)$app_id, $login, md5($password)]);
-            var_dump(md5($password));
-            var_dump($login);
-            var_dump($app_id);
         } catch (PDOException $e) {
             print('Error : ' . $e->getMessage());
             exit();
@@ -353,6 +350,6 @@ else {
     // Сохраняем куку с признаком успешного сохранения.
         setcookie('save', '1');
 
-       // Делаем перенаправление.
-//        header('Location: ./');
+//        Делаем перенаправление.
+       header('Location: ./');
 }
