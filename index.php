@@ -316,7 +316,7 @@ else {
         $password = randomPassword();
         // Сохраняем в Cookies.
         setcookie('login', $login);
-        setcookie('pass', $pass);
+        setcookie('pass', $password);
 
         try {
             $stmt = $db->prepare("REPLACE INTO application SET name = ?,email = ?,year = ?,pol = ?,kol_kon = ?,biography = ?,ccheck = ?");
