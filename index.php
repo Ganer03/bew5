@@ -287,14 +287,13 @@ else {
             $stmt = $db->prepare("SELECT app_id FROM user WHERE login = ?");
             $stmt->execute([$_SESSION['login']]);
             $app_id = $stmt->fetchColumn();
-            var_dump($app_id);
             $stmt = $db->prepare("UPDATE application SET name = ?, email = ?, year = ?, pol = ?, kol_kon = ?, biography = ? WHERE id = ?");
             $stmt->execute([$_POST['fio'], $_POST['email'], (int)$_POST['year'], $_POST['pol'], (int)$_POST['limbs'], $_POST['biography'], $app_id]);
-            var_dump($_SESSION['login']);
             $stmt = $db->prepare("SELECT idsuper FROM userconnection WHERE idap = ?");
             $stmt->execute([$app_id]);
             $abil = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
-
+            var_dump($abil);
+            var_dump($_POST['super']);
             if (array_diff($abil, $_POST['super'])) {
                 $stmt = $db->prepare("DELETE FROM userconnection WHERE idap = ?");
                 $stmt->execute([$app_id]);
