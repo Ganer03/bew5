@@ -6,7 +6,7 @@
  */
 function randomPassword() {
     $alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
-    $pass = array(); 
+    $pass = array();
     $alphaLength = strlen($alphabet) - 1;
     $ram = rand(15, 20);
     for ($i = 0; $i < $ram; $i++) {
@@ -28,25 +28,25 @@ $db = new PDO('mysql:host=localhost;dbname=u52802', $user, $pass, [PDO::ATTR_PER
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     // Массив для временного хранения сообщений пользователю.
     $messages = array();
-    
+
     // В суперглобальном массиве $_COOKIE PHP хранит все имена и значения куки текущего запроса.
     // Выдаем сообщение об успешном сохранении.
     if (!empty($_COOKIE['save'])) {
-    // Удаляем куку, указывая время устаревания в прошлом.
-    setcookie('save', '', 100000);
-    setcookie('login', '', 100000);
-    setcookie('pass', '', 100000);
-    // Выводим сообщение пользователю.
-    $messages[] = 'Спасибо, результаты сохранены.';
-    // Если в куках есть пароль, то выводим сообщение.
-    if (!empty($_COOKIE['pass'])) {
-      $messages[] = sprintf('Вы можете <a href="login.php">войти</a> с логином <strong>%s</strong>
+        // Удаляем куку, указывая время устаревания в прошлом.
+        setcookie('save', '', 100000);
+        setcookie('login', '', 100000);
+        setcookie('pass', '', 100000);
+        // Выводим сообщение пользователю.
+        $messages[] = 'Спасибо, результаты сохранены.';
+        // Если в куках есть пароль, то выводим сообщение.
+        if (!empty($_COOKIE['pass'])) {
+            $messages[] = sprintf('Вы можете <a href="login.php">войти</a> с логином <strong>%s</strong>
         и паролем <strong>%s</strong> для изменения данных.',
-        strip_tags($_COOKIE['login']),
-        strip_tags($_COOKIE['pass']));
+                strip_tags($_COOKIE['login']),
+                strip_tags($_COOKIE['pass']));
+        }
     }
-    }
-    
+
     // Складываем признак ошибок в массив.
     $errors = array();
     $errors['fio'] = !empty($_COOKIE['fio_error']);
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $errors['biography'] = !empty($_COOKIE['biography_error']);
     $errors['check-1'] = !empty($_COOKIE['check_1_error']);
     // TODO: аналогично все поля.
-    
+
     // Выдаем сообщения об ошибках.
     if (!empty($errors['fio'])) {
         // Удаляем куку, указывая время устаревания в прошлом.
@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $messages[] = '<div class="error">Поставьте галочку.</div>';
     }
     // TODO: тут выдать сообщения об ошибках в других полях.
-    
+
     // Складываем предыдущие значения полей в массив, если есть.
     // При этом санитизуем все данные для безопасного отображения в браузере.
     $values = array();
@@ -122,60 +122,60 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $values['biography'] = empty($_COOKIE['biography_value']) ? '' : $_COOKIE['biography_value'];
     $values['check-1'] = empty($_COOKIE['check_1_value']) ? '' : $_COOKIE['check_1_value'];
     // TODO: аналогично все поля.
-    
+
     // Если нет предыдущих ошибок ввода, есть кука сессии, начали сессию и
     // ранее в сессию записан факт успешного логина.
     if (empty($errors) && !empty($_COOKIE[session_name()]) &&
-      session_start() && !empty($_SESSION['login'])) {
-    // TODO: загрузить данные пользователя из БД
-    // и заполнить переменную $values,
-    // предварительно санитизовав.
-    $login = $_SESSION['login'];
-    try {
-        $stmt = $db->prepare("SELECT app_id FROM user WHERE login = ?");
-        $stmt->execute([$login]);
-        $app_id = $stmt->fetchColumn();
+        session_start() && !empty($_SESSION['login'])) {
+        // TODO: загрузить данные пользователя из БД
+        // и заполнить переменную $values,
+        // предварительно санитизовав.
+        $login = $_SESSION['login'];
+        try {
+            $stmt = $db->prepare("SELECT app_id FROM user WHERE login = ?");
+            $stmt->execute([$login]);
+            $app_id = $stmt->fetchColumn();
 
-        $stmt = $db->prepare("SELECT name,email,year,pol,kol_kon,biography FROM application WHERE id = ?");
-        $stmt->execute([$app_id]);
-        $app = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $stmt = $db->prepare("SELECT name,email,year,pol,kol_kon,biography FROM application WHERE id = ?");
+            $stmt->execute([$app_id]);
+            $app = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        $stmt = $db->prepare("SELECT idsuper FROM userconnection WHERE idsuper = ?");
-        $stmt->execute([$app_id]);
-        $abilities = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+            $stmt = $db->prepare("SELECT idsuper FROM userconnection WHERE idsuper = ?");
+            $stmt->execute([$app_id]);
+            $abilities = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
-        if (!empty($app[0]['name'])) {
-            $values['fio'] = $app[0]['name'];
-        }
-        if (!empty($app[0]['email'])) {
-            $values['email'] = $app[0]['email'];
-        }
-        if (!empty($app[0]['year'])) {
-            $values['year'] = $app[0]['year'];
-        }
-        if (!empty($app[0]['kol_kon'])) {
-            $values['limbs'] = $app[0]['kol_kon'];
-        }
-        if (!empty($app[0]['pol'])) {
-            $values['pol'] = $app[0]['pol'];
-        }
-        if (!empty($dates[0]['biography'])) {
-            $values['biography'] = $dates[0]['biography'];
-        }
-        if (!empty($abilities)) {
-            $values['super'] =  serialize($abilities);
-        }
+            if (!empty($app[0]['name'])) {
+                $values['fio'] = $app[0]['name'];
+            }
+            if (!empty($app[0]['email'])) {
+                $values['email'] = $app[0]['email'];
+            }
+            if (!empty($app[0]['year'])) {
+                $values['year'] = $app[0]['year'];
+            }
+            if (!empty($app[0]['kol_kon'])) {
+                $values['limbs'] = $app[0]['kol_kon'];
+            }
+            if (!empty($app[0]['pol'])) {
+                $values['pol'] = $app[0]['pol'];
+            }
+            if (!empty($dates[0]['biography'])) {
+                $values['biography'] = $dates[0]['biography'];
+            }
+            if (!empty($abilities)) {
+                $values['super'] =  serialize($abilities);
+            }
 
-    } catch (PDOException $e) {
-        print('Error : ' . $e->getMessage());
-        exit();
-    }
-    ///////
-    
-    printf('Вход с логином %s, uid %d', $_SESSION['login'], $_SESSION['uid']);
+        } catch (PDOException $e) {
+            print('Error : ' . $e->getMessage());
+            exit();
+        }
+        ///////
+
+        printf('Вход с логином %s, uid %d', $_SESSION['login'], $_SESSION['uid']);
     }
     // Включаем содержимое файла form.php.
-    // В нем будут доступны переменные $messages, $errors и $values для вывода 
+    // В нем будут доступны переменные $messages, $errors и $values для вывода
     // сообщений, полей с ранее заполненными данными и признаками ошибок.
     include('form.php');
 }
@@ -187,8 +187,7 @@ else {
         // Выдаем куку на день с флажком об ошибке в поле fio.
         setcookie('fio_error', '1', time() + 24 * 60 * 60);
         $errors = TRUE;
-    }
-    else {
+    } else {
         // Сохраняем ранее введенное в форму значение на месяц.
         setcookie('fio_value', $_POST['fio'], time() + 30 * 24 * 60 * 60);
     }
@@ -197,8 +196,7 @@ else {
         // Выдаем куку на день с флажком об ошибке в поле fio.
         setcookie('email_error', '1', time() + 24 * 60 * 60);
         $errors = TRUE;
-    }
-    else {
+    } else {
         // Сохраняем ранее введенное в форму значение на месяц.
         setcookie('email_value', $_POST['email'], time() + 30 * 24 * 60 * 60);
     }
@@ -207,38 +205,34 @@ else {
         // Выдаем куку на день с флажком об ошибке в поле fio.
         setcookie('year_error', '1', time() + 24 * 60 * 60);
         $errors = TRUE;
-    }
-    else {
+    } else {
         // Сохраняем ранее введенное в форму значение на месяц.
         setcookie('year_value', $_POST['year'], time() + 30 * 24 * 60 * 60);
     }
 
-    if (empty($_POST['limbs']) || !is_numeric($_POST['limbs']) ||($_POST['limbs']<1)||($_POST['limbs']>5)) {
+    if (empty($_POST['limbs']) || !is_numeric($_POST['limbs']) || ($_POST['limbs'] < 1) || ($_POST['limbs'] > 5)) {
         // Выдаем куку на день с флажком об ошибке в поле fio.
         setcookie('limbs_error', '1', time() + 24 * 60 * 60);
         $errors = TRUE;
-    }
-    else {
+    } else {
         // Сохраняем ранее введенное в форму значение на месяц.
         setcookie('limbs_value', $_POST['limbs'], time() + 30 * 24 * 60 * 60);
     }
 
-    if (empty($_POST['pol']) || !($_POST['pol']=='M' || $_POST['pol']=='W')) {
+    if (empty($_POST['pol']) || !($_POST['pol'] == 'M' || $_POST['pol'] == 'W')) {
         // Выдаем куку на день с флажком об ошибке в поле fio.
         setcookie('pol_error', '1', time() + 24 * 60 * 60);
         $errors = TRUE;
-    }
-    else {
+    } else {
         // Сохраняем ранее введенное в форму значение на месяц.
         setcookie('pol_value', $_POST['pol'], time() + 30 * 24 * 60 * 60);
     }
 
-    if (empty($_POST['super']) || !is_array($_POST['super']) || (int)$_POST['super']<1 || (int)$_POST['super']>3) {
+    if (empty($_POST['super']) || !is_array($_POST['super']) || (int)$_POST['super'] < 1 || (int)$_POST['super'] > 3) {
         // Выдаем куку на день с флажком об ошибке в поле fio.
         setcookie('super_error', '1', time() + 24 * 60 * 60);
         $errors = TRUE;
-    }
-    else {
+    } else {
         // Сохраняем ранее введенное в форму значение на месяц.
         setcookie('super_value', serialize($_POST['super']), time() + 30 * 24 * 60 * 60);
     }
@@ -247,8 +241,7 @@ else {
         // Выдаем куку на день с флажком об ошибке в поле fio.
         setcookie('biography_error', '1', time() + 24 * 60 * 60);
         $errors = TRUE;
-    }
-    else {
+    } else {
         // Сохраняем ранее введенное в форму значение на месяц.
         setcookie('biography_value', $_POST['biography'], time() + 30 * 24 * 60 * 60);
     }
@@ -257,24 +250,22 @@ else {
         // Выдаем куку на день с флажком об ошибке в поле fio.
         setcookie('check_1_error', '1', time() + 24 * 60 * 60);
         $errors = TRUE;
-    }
-    else {
+    } else {
         // Сохраняем ранее введенное в форму значение на месяц.
         setcookie('check_1_value', $_POST['check-1'], time() + 30 * 24 * 60 * 60);
     }
-    
+
     // *************
     // TODO: тут необходимо проверить правильность заполнения всех остальных полей.
     // Сохранить в Cookie признаки ошибок и значения полей.
     // *************
-    
+
     if ($errors) {
-    // При наличии ошибок перезагружаем страницу и завершаем работу скрипта.
-    header('Location: index.php');
-    exit();
-    }
-    else {
-    // Удаляем Cookies с признаками ошибок.
+        // При наличии ошибок перезагружаем страницу и завершаем работу скрипта.
+        header('Location: index.php');
+        exit();
+    } else {
+        // Удаляем Cookies с признаками ошибок.
         setcookie('fio_error', '', 100000);
         setcookie('email_error', '', 100000);
         setcookie('year_error', '', 100000);
@@ -283,84 +274,83 @@ else {
         setcookie('super_error', '', 100000);
         setcookie('biography_error', '', 100000);
         setcookie('check_1_error', '', 100000);
-    // TODO: тут необходимо удалить остальные Cookies.
+        // TODO: тут необходимо удалить остальные Cookies.
     }
-    
+
     // Проверяем меняются ли ранее сохраненные данные или отправляются новые.
     if (!empty($_COOKIE[session_name()]) &&
-      session_start() && !empty($_SESSION['login'])) {
-    // TODO: перезаписать данные в БД новыми данными,
-    // кроме логина и пароля.
-    try {
-        $stmt = $db->prepare("SELECT app_id FROM user WHERE login = ?");
-        $stmt->execute([$login]);
-        $app_id = $stmt->fetchColumn();
-        
-        $stmt = $db->prepare("UPDATE application SET name = ?, email = ?, year = ?, pol = ?, kol_kon = ?, biography = ? WHERE app_id = ?");
-        $stmt->execute([$fio, $email, $year, $pol, $limbs, $biography, $app_id]);
+        session_start() && !empty($_SESSION['login'])) {
+        // TODO: перезаписать данные в БД новыми данными,
+        // кроме логина и пароля.
+        try {
+            $stmt = $db->prepare("SELECT app_id FROM user WHERE login = ?");
+            $stmt->execute([$login]);
+            $app_id = $stmt->fetchColumn();
 
-        $stmt = $db->prepare("SELECT idsuper FROM userconnection WHERE idap = ?");
-        $stmt->execute([$app_id]);
-        $abil = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+            $stmt = $db->prepare("UPDATE application SET name = ?, email = ?, year = ?, pol = ?, kol_kon = ?, biography = ? WHERE app_id = ?");
+            $stmt->execute([$fio, $email, $year, $pol, $limbs, $biography, $app_id]);
 
-        if (array_diff($abil, $abilities)) {
-            $stmt = $db->prepare("DELETE FROM userconnection WHERE idap = ?");
+            $stmt = $db->prepare("SELECT idsuper FROM userconnection WHERE idap = ?");
             $stmt->execute([$app_id]);
+            $abil = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
-            $stmt = $db->prepare("INSERT INTO userconnection idap = ?, idsuper = ?");
-            foreach ($abilities as $super_id) {
-                $stmt->execute([$app_id, $super_id]);
+            if (array_diff($abil, $abilities)) {
+                $stmt = $db->prepare("DELETE FROM userconnection WHERE idap = ?");
+                $stmt->execute([$app_id]);
+
+                $stmt = $db->prepare("INSERT INTO userconnection SET idap = ?, idsuper = ?");
+                foreach ($abilities as $super_id) {
+                    $stmt->execute([$app_id, $super_id]);
+                }
             }
+
+        } catch (PDOException $e) {
+            print('Error : ' . $e->getMessage());
+            exit();
         }
+    } else {
+        // Генерируем уникальный логин и пароль.
+        // TODO: сделать механизм генерации, например функциями rand(), uniquid(), md5(), substr().
+        $login = uniquid();
+        $password = randomPassword();
+        // Сохраняем в Cookies.
+        setcookie('login', $login);
+        setcookie('pass', $pass);
 
-    } catch (PDOException $e) {
-        print('Error : ' . $e->getMessage());
-        exit();
-    }
-    else {
-    // Генерируем уникальный логин и пароль.
-    // TODO: сделать механизм генерации, например функциями rand(), uniquid(), md5(), substr().
-    $login = uniquid();
-    $password = randomPassword();
-    // Сохраняем в Cookies.
-    setcookie('login', $login);
-    setcookie('pass', $pass);
-    
-    try {
-        $stmt = $db->prepare("REPLACE INTO application SET name = ?,email = ?,year = ?,pol = ?,kol_kon = ?,biography = ?,ccheck = ?");
-        $stmt -> execute([$_POST['fio'], $_POST['email'], (int)$_POST['year'], $_POST['pol'], (int)$_POST['limbs'], $_POST['biography'], 1]);
-    }
-    catch(PDOException $e){
-        print('Error : ' . $e->getMessage());
-        exit();
-    }
-
-    $app_id = $db->lastInsertId();
-
-    foreach ($_POST['super'] as $super){
-        try{
-            $stmt = $db->prepare("REPLACE INTO userconnection SET idap = ?, idsuper = ?");
-            $stmt->execute([$us_last, $super]);
+        try {
+            $stmt = $db->prepare("REPLACE INTO application SET name = ?,email = ?,year = ?,pol = ?,kol_kon = ?,biography = ?,ccheck = ?");
+            $stmt->execute([$_POST['fio'], $_POST['email'], (int)$_POST['year'], $_POST['pol'], (int)$_POST['limbs'], $_POST['biography'], 1]);
         } catch (PDOException $e) {
             print('Error : ' . $e->getMessage());
             exit();
         }
 
-    try{
-        $stmt = $db->prepare("INSERT INTO user app_id = ?, login = ?, password = ?");
-        $stmt->execute([$app_id, $login, md5($password)]);
+        $app_id = $db->lastInsertId();
+
+        foreach ($_POST['super'] as $super) {
+            try {
+                $stmt = $db->prepare("REPLACE INTO userconnection SET idap = ?, idsuper = ?");
+                $stmt->execute([$us_last, $super]);
+            } catch (PDOException $e) {
+                print('Error : ' . $e->getMessage());
+                exit();
+            }
+
+            try {
+                $stmt = $db->prepare("INSERT INTO user SET app_id = ?, login = ?, password = ?");
+                $stmt->execute([$app_id, $login, md5($password)]);
+            } catch (PDOException $e) {
+                print('Error : ' . $e->getMessage());
+                exit();
+            }
+            // TODO: Сохранение данных формы, логина и хеш md5() пароля в базу данных.
+            // ...
+        }
+
+        // Сохраняем куку с признаком успешного сохранения.
+        setcookie('save', '1');
+
+        // Делаем перенаправление.
+        header('Location: ./');
     }
-    catch (PDOException $e) {
-        print('Error : ' . $e->getMessage());
-        exit();
-    }
-    // TODO: Сохранение данных формы, логина и хеш md5() пароля в базу данных.
-    // ...
-    }
-    
-    // Сохраняем куку с признаком успешного сохранения.
-    setcookie('save', '1');
-    
-    // Делаем перенаправление.
-    header('Location: ./');
 }
