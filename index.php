@@ -300,7 +300,7 @@ else {
                 $stmt->execute([$app_id]);
 
                 $stmt = $db->prepare("INSERT INTO userconnection SET idap = ?, idsuper = ?");
-                foreach ($abilities as $super_id) {
+                foreach ($_POST['super'] as $super_id) {
                     $stmt->execute([$app_id, $super_id]);
                 }
             }
