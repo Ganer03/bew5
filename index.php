@@ -311,7 +311,7 @@ else {
     } else {
         // Генерируем уникальный логин и пароль.
         // TODO: сделать механизм генерации, например функциями rand(), uniquid(), md5(), substr().
-        $login = uniquid();
+        $login = uniqid();
         $password = randomPassword();
         // Сохраняем в Cookies.
         setcookie('login', $login);
