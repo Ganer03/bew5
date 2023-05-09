@@ -33,9 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     // Выдаем сообщение об успешном сохранении.
     if (!empty($_COOKIE['save'])) {
         // Удаляем куку, указывая время устаревания в прошлом.
-        setcookie('save', '', 100000);
-        setcookie('login', '', 100000);
-        setcookie('pass', '', 100000);
+        setcookie('save', '', 100000);        
         // Выводим сообщение пользователю.
         $messages[] = 'Спасибо, результаты сохранены.';
         // Если в куках есть пароль, то выводим сообщение.
@@ -45,6 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 strip_tags($_COOKIE['login']),
                 strip_tags($_COOKIE['pass']));
         }
+        setcookie('login', '', 100000);
+        setcookie('pass', '', 100000);
     }
 
     // Складываем признак ошибок в массив.
@@ -280,11 +280,12 @@ else {
     // Проверяем меняются ли ранее сохраненные данные или отправляются новые.
     if (!empty($_COOKIE[session_name()]) &&
         session_start() && !empty($_SESSION['login'])) {
+        echo 'good';
         // TODO: перезаписать данные в БД новыми данными,
         // кроме логина и пароля.
         try {
             $stmt = $db->prepare("SELECT app_id FROM user WHERE login = ?");
-            $stmt->execute([$login]);
+            $stmt->execute($_SESSION[$login]);
             $app_id = $stmt->fetchColumn();
 
             $stmt = $db->prepare("UPDATE application SET name = ?, email = ?, year = ?, pol = ?, kol_kon = ?, biography = ? WHERE app_id = ?");
@@ -351,10 +352,10 @@ else {
             // ...
         }
 
-            // Сохраняем куку с признаком успешного сохранения.
-            setcookie('save', '1');
+//             // Сохраняем куку с признаком успешного сохранения.
+//             setcookie('save', '1');
 
-            // Делаем перенаправление.
-            header('Location: ./');
+//             // Делаем перенаправление.
+//             header('Location: ./');
     }
 }
