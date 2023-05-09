@@ -341,8 +341,8 @@ else {
                 $stmt = $db->prepare("REPLACE INTO user SET app_id = ?, login = ?, password = ?");
                 $stmt->execute([$app_id, $login, md5($password)]);
                 echo md5($password);
-                echo str($login);
-                echo str($app_id);
+                echo $login;
+                echo $app_id;
             } catch (PDOException $e) {
                 print('Error : ' . $e->getMessage());
                 exit();
