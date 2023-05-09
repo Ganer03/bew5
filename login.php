@@ -96,6 +96,7 @@ else {
         $stmt = $db->prepare("SELECT app_id FROM user WHERE login = ?");
         $stmt->execute([$login]);
         var_dump($stmt->fetchColumn());
+        var_dump($stmt->fetchColumn());
         $_SESSION['uid'] = $stmt->fetchColumn();
         var_dump($_SESSION['uid']);
         var_dump($stmt->fetchColumn());
