@@ -281,6 +281,7 @@ else {
     if (!empty($_COOKIE[session_name()]) &&
         session_start() && !empty($_SESSION['login'])) {
         echo 'good';
+        var_dump($_SESSION['login']);
         // TODO: перезаписать данные в БД новыми данными,
         // кроме логина и пароля.
         try {
