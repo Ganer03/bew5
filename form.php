@@ -1,5 +1,6 @@
 <html>
   <head>
+    <link rel="stylesheet" href="form.css">
     <style>
 /* Сообщения об ошибках и поля с ошибками выводим с красным бордюром. */
 .error {
@@ -57,6 +58,7 @@ if (!empty($messages)) {
             </select>
         </label>
         Пол:<br/>
+        <div class="poler">
         <?php
         if($values['pol'] == 'W'){
             printf('<label class="pot"><input type="radio" name="pol" value="M">M</label>');
@@ -78,6 +80,8 @@ if (!empty($messages)) {
                 }
             }
         ?>
+        </div>
+        <div class="limber">
         Кол-во конечностей:<br/>
         <?php
         if($errors['limbs']){
@@ -97,6 +101,7 @@ if (!empty($messages)) {
                     printf('<label><input type="radio" name="limbs" value="%d"/>%d</label>', $i, $i);
             }
         ?>
+        </div>
         <label>
             Сверхспособности:<br/>
             <?php
