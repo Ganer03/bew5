@@ -146,10 +146,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $abilities = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
             if (!empty($app[0]['name'])) {
-                $values['fio'] = $app[0]['name'];
+                $values['fio'] = htmlspecialchars(strip_tags($app[0]['name']));
             }
             if (!empty($app[0]['email'])) {
-                $values['email'] = $app[0]['email'];
+                $values['email'] = htmlspecialchars(strip_tags($app[0]['email']));
             }
             if (!empty($app[0]['year'])) {
                 $values['year'] = $app[0]['year'];
@@ -161,7 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 $values['pol'] = $app[0]['pol'];
             }
             if (!empty($app[0]['biography'])) {
-                $values['biography'] = $app[0]['biography'];
+                $values['biography'] = htmlspecialchars(strip_tags($app[0]['biography']));
             }
             if (!empty($abilities)) {
                 $values['super'] =  $abilities;
