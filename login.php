@@ -4,8 +4,8 @@
         border: 2px solid red;
     }
 </style>
-<?php
 <link rel="stylesheet" href="login.css">
+<?php
 
 /**
  * Файл login.php для не авторизованного пользователя выводит форму логина.
