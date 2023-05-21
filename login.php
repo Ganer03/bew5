@@ -5,6 +5,7 @@
     }
 </style>
 <?php
+<link rel="stylesheet" href="form.css">
 
 /**
  * Файл login.php для не авторизованного пользователя выводит форму логина.
