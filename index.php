@@ -127,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     // ранее в сессию записан факт успешного логина.
     if (count(array_filter($errors)) === 0 && !empty($_COOKIE[session_name()]) &&
         session_start() && !empty($_SESSION['login'])) {
-        $_SESSION['token'] = bin2hex(random_bytes(64));
+        $_SESSION['token'] = bin2hex(random_bytes(32));
         // TODO: загрузить данные пользователя из БД
         // и заполнить переменную $values,
         // предварительно санитизовав.
@@ -311,6 +311,8 @@ else {
             exit();
         }
         } else {
+            var_dump($_POST['token']);
+            var_dump($_SESSION['token']);
             die('Ошибка CSRF: недопустимый токен');
         }
     } else {
