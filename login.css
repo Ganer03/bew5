@@ -1,1 +1,30 @@
+.form{
+    text-align: center;
+    width: 80%;
+    margin: 0 auto;
+    background-color: aqua;
+    border: 1rem ridge rgb(30 0 82);
+}
+
+form{
+    width: 80%;
+    margin: 0 auto;
+    margin-bottom: 60px;
+    margin-top: 40px;
+    font-size: 20px;
+}
+
+label{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+input{
+    border: 3px solid #390364;
+    border-radius: 10px;
+    height: 40px;
+    width: 100%;
+}
 
