@@ -115,10 +115,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $values = array();
     $values['fio'] = empty($_COOKIE['fio_value']) ? '' : htmlspecialchars(strip_tags($_COOKIE['fio_value']));
     $values['email'] = empty($_COOKIE['email_value']) ? '' : htmlspecialchars(strip_tags($_COOKIE['email_value']));
-    $values['year'] = empty($_COOKIE['year_value']) ? '' : (int)htmlspecialchars(strip_tags($_COOKIE['year_value']));
-    $values['limbs'] = empty($_COOKIE['limbs_value']) ? '' : (int)htmlspecialchars(strip_tags($_COOKIE['limbs_value']));
+    $values['year'] = empty($_COOKIE['year_value']) ? '' : (int)$_COOKIE['year_value'];
+    $values['limbs'] = empty($_COOKIE['limbs_value']) ? '' : (int)$_COOKIE['limbs_value'];
     $values['pol'] = empty($_COOKIE['pol_value']) ? '' : htmlspecialchars(strip_tags($_COOKIE['pol_value']));
-    $values['super'] = empty($_COOKIE['super_value']) ? '' : unserialize(strip_tags($_COOKIE['super_value']));
+    $values['super'] = empty($_COOKIE['super_value']) ? '' : unserialize($_COOKIE['super_value']);
     $values['biography'] = empty($_COOKIE['biography_value']) ? '' : htmlspecialchars(strip_tags($_COOKIE['biography_value']));
     $values['check-1'] = empty($_COOKIE['check_1_value']) ? '' : htmlspecialchars(strip_tags($_COOKIE['check_1_value']));
     // TODO: аналогично все поля.
