@@ -141,7 +141,7 @@ if (!empty($messages)) {
             Биография:<br/>
             <textarea name="biography" <?php if ($errors['biography']) {print 'class="error"';} ?> value="<?php print $values['biography'];?>"><?php print $values['biography'];?></textarea>
         </label><br/>
-        <label <?php if ($errors['check-1']) {print 'class="error"';} ?>>
+        <label class="ccheck" <?php if ($errors['check-1']) {print 'class="error"';} ?>>
             <input type="checkbox" <?php if ($errors['check-1']) {print 'class="error"';} else if($values['check-1']!='') {print 'checked="checked"';}?> name="check-1"/>
             с контрактом ознакомлен (а)
         </label><br/>
