@@ -113,20 +113,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     // Складываем предыдущие значения полей в массив, если есть.
     // При этом санитизуем все данные для безопасного отображения в браузере.
     $values = array();
-    $values['fio'] = empty($_COOKIE['fio_value']) ? '' : $_COOKIE['fio_value'];
-    $values['email'] = empty($_COOKIE['email_value']) ? '' : $_COOKIE['email_value'];
-    $values['year'] = empty($_COOKIE['year_value']) ? '' : (int)$_COOKIE['year_value'];
-    $values['limbs'] = empty($_COOKIE['limbs_value']) ? '' : (int)$_COOKIE['limbs_value'];
-    $values['pol'] = empty($_COOKIE['pol_value']) ? '' : $_COOKIE['pol_value'];
-    $values['super'] = empty($_COOKIE['super_value']) ? '' : unserialize($_COOKIE['super_value']);
-    $values['biography'] = empty($_COOKIE['biography_value']) ? '' : $_COOKIE['biography_value'];
-    $values['check-1'] = empty($_COOKIE['check_1_value']) ? '' : $_COOKIE['check_1_value'];
+    $values['fio'] = empty($_COOKIE['fio_value']) ? '' : htmlspecialchars(strip_tags($_COOKIE['fio_value']));
+    $values['email'] = empty($_COOKIE['email_value']) ? '' : htmlspecialchars(strip_tags($_COOKIE['email_value']));
+    $values['year'] = empty($_COOKIE['year_value']) ? '' : (int)htmlspecialchars(strip_tags($_COOKIE['year_value']));
+    $values['limbs'] = empty($_COOKIE['limbs_value']) ? '' : (int)htmlspecialchars(strip_tags($_COOKIE['limbs_value']));
+    $values['pol'] = empty($_COOKIE['pol_value']) ? '' : htmlspecialchars(strip_tags($_COOKIE['pol_value']));
+    $values['super'] = empty($_COOKIE['super_value']) ? '' : unserialize(strip_tags($_COOKIE['super_value']));
+    $values['biography'] = empty($_COOKIE['biography_value']) ? '' : htmlspecialchars(strip_tags($_COOKIE['biography_value']));
+    $values['check-1'] = empty($_COOKIE['check_1_value']) ? '' : htmlspecialchars(strip_tags($_COOKIE['check_1_value']));
     // TODO: аналогично все поля.
 
     // Если нет предыдущих ошибок ввода, есть кука сессии, начали сессию и
     // ранее в сессию записан факт успешного логина.
     if (count(array_filter($errors)) === 0 && !empty($_COOKIE[session_name()]) &&
         session_start() && !empty($_SESSION['login'])) {
+        $_SESSION['token'] = bin2hex(random_bytes(64));
         // TODO: загрузить данные пользователя из БД
         // и заполнить переменную $values,
         // предварительно санитизовав.
@@ -280,7 +281,8 @@ else {
     // Проверяем меняются ли ранее сохраненные данные или отправляются новые.
     if (!empty($_COOKIE[session_name()]) &&
         session_start() && !empty($_SESSION['login'])) {
-        echo 'good';
+        if (!empty($_POST['token']) && hash_equals($_POST['token'], $_SESSION['token'])) {
+        //echo 'good';
         // TODO: перезаписать данные в БД новыми данными,
         // кроме логина и пароля.
         try {
@@ -308,8 +310,11 @@ else {
             print('Error : ' . $e->getMessage());
             exit();
         }
+        } else {
+            die('Ошибка CSRF: недопустимый токен');
+        }
     } else {
-        echo 'gr';
+        //echo 'gr';
         // Генерируем уникальный логин и пароль.
         // TODO: сделать механизм генерации, например функциями rand(), uniquid(), md5(), substr().
         $login = uniqid();
