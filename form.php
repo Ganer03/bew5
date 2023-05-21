@@ -146,6 +146,7 @@ if (!empty($messages)) {
             с контрактом ознакомлен (а)
         </label><br/>
         <input type="submit" value="Отправить"/>
+        <?php if (!empty($_SESSION['login'])) {echo '<input type="hidden" name="token" value="' . $_SESSION["token"] . '">'; } ?>
     </form>
 </div>
   </body>
