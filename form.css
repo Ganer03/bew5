@@ -1,5 +1,49 @@
+.formss{
+    text-align: center;
+    width: 80%;
+    margin: 0 auto;
+    background-color: aqua;
+    border: 1rem ridge rgb(30 0 82);
+}
+
+form{
+    width: 80%;
+    margin: 0 auto;
+    margin-bottom: 60px;
+    margin-top: 40px;
+    font-size: 20px;
+}
+
+select[name='super[]']{
+    border: 3px solid #390364;
+    border-radius: 10px;
+    height: 80px;
+    font-size: 20px;
+}
+
+input[name='fio'] input[name='email'] textarea select input[type='button']{
+    border: 3px solid #390364;
+    border-radius: 10px;
+    height: 40px;
+    font-size: 20px;
+}
+
+.pot{
+    margin-right: 20px;
+}
+
+.limber>label{
+    margin-right: 20px;
+}
+
+.ccheck{
+    display: block;
+}
+
 form>label{
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
+    font-size: 20px;
 }
+
